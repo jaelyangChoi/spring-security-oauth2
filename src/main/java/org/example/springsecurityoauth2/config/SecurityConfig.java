@@ -1,6 +1,7 @@
 package org.example.springsecurityoauth2.config;
 
 import lombok.RequiredArgsConstructor;
+import org.example.springsecurityoauth2.oauth2.CustomClientRegistrationRepo;
 import org.example.springsecurityoauth2.service.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomClientRegistrationRepo clientRegistrationRepo;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -22,6 +24,7 @@ public class SecurityConfig {
         http
                 .oauth2Login(oauth2 -> oauth2
                         .loginPage("/login")
+                        .clientRegistrationRepository(clientRegistrationRepo.clientRegistrationRepository())
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
                 );
